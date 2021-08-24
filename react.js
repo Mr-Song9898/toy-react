@@ -46,16 +46,25 @@ class ElementWrapper {
     if(name.match(/^on([\s\S]+)/)){
 			this.root.addEventListener(RegExp.$1.replace(/^[\s\S]/, c=>c.toLowerCase()), value);
 		} else {
-			this.root.setAttribute(name, value);
+      if (name === 'className') {
+			  this.root.setAttribute('class', value);
+      } else {
+        this.root.setAttribute(name, value);
+      }
 		}
   }
 
   appendChild(component) {
     // this.root.appendChild(component.root);
     const range = document.createRange();
+
+    if (!component) {
+      return;
+    }
+
     range.setStart(this.root, this.root.childNodes.length);
     range.setEnd(this.root, this.root.childNodes.length);
-  
+
     component._renderToDom(range);
   }
 
